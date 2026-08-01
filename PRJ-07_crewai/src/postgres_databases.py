@@ -21,6 +21,28 @@ class DatabaseDesconhecido(ValueError):
     """O nome informado não está no catálogo."""
 
 
+class ConfiguracaoAusente(RuntimeError):
+    """Falta variável de ambiente obrigatória para conectar."""
+
+
+def _obrigatorio(nome: str) -> str:
+    """Lê uma variável que NÃO pode ter valor padrão.
+
+    Credencial de banco não tem default. ``PG_USER`` caía em ``postgres`` — o
+    superusuário —, o oposto do desenho somente-leitura deste projeto; e
+    ``PG_PASSWORD`` caía numa senha conhecida. Nos dois casos a conexão poderia ter
+    sucesso com privilégio errado, sem nenhum aviso. Falhar aqui é o comportamento
+    correto: erro de configuração deve aparecer na configuração.
+    """
+    valor = os.getenv(nome)
+    if not valor:
+        raise ConfiguracaoAusente(
+            f"{nome} não está definida. Copie .env.example para .env e preencha — "
+            f"não existe valor padrão de propósito."
+        )
+    return valor
+
+
 class PostgresDatabases:
     # nome padrão -> (variável de ambiente que o renomeia, arquivo de schema)
     _CATALOGO = {
@@ -52,8 +74,10 @@ class PostgresDatabases:
     def get_database_uri(cls, database_name: str) -> str:
         """Monta a URI REAL de conexão Postgres a partir de variáveis de ambiente."""
         cls._schema_de(database_name)  # valida o nome antes de montar a URI
+        # Host e porta têm padrão porque errar neles não muda privilégio: a conexão
+        # simplesmente falha. Usuário e senha não têm — ver _obrigatorio().
         host = os.getenv("PG_HOST", "localhost")
         port = os.getenv("PG_PORT", "5432")
-        user = os.getenv("PG_USER", "postgres")
-        password = os.getenv("PG_PASSWORD", "postgres")
+        user = _obrigatorio("PG_USER")
+        password = _obrigatorio("PG_PASSWORD")
         return f"postgresql://{user}:{password}@{host}:{port}/{database_name}"

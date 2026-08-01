@@ -6,7 +6,11 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from postgres_databases import DatabaseDesconhecido, PostgresDatabases  # noqa: E402
+from postgres_databases import (  # noqa: E402
+    ConfiguracaoAusente,
+    DatabaseDesconhecido,
+    PostgresDatabases,
+)
 
 
 def test_nomes_padrao():
@@ -58,3 +62,48 @@ def test_uri_usa_credenciais_do_ambiente(monkeypatch):
     monkeypatch.setenv("PG_PASSWORD", "s3nh4")
     uri = PostgresDatabases.get_database_uri("ecommerce")
     assert uri == "postgresql://giulia_ro:s3nh4@db.interno:6543/ecommerce"
+
+
+# --------------------------------------------------------------------------
+# Credencial não tem valor padrão
+#
+# Antes: PG_USER caía em "postgres" (superusuário) e PG_PASSWORD numa senha
+# conhecida. A conexão podia ter sucesso com privilégio errado, em silêncio —
+# o oposto do desenho somente-leitura do projeto.
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("faltando", ["PG_USER", "PG_PASSWORD"])
+def test_credencial_sem_valor_padrao_falha_explicitamente(monkeypatch, faltando):
+    monkeypatch.setenv("PG_USER", "giulia_ro")
+    monkeypatch.setenv("PG_PASSWORD", "s3nh4")
+    monkeypatch.delenv(faltando, raising=False)
+    with pytest.raises(ConfiguracaoAusente, match=faltando):
+        PostgresDatabases.get_database_uri("ecommerce")
+
+
+@pytest.mark.parametrize("vazia", ["PG_USER", "PG_PASSWORD"])
+def test_credencial_vazia_conta_como_ausente(monkeypatch, vazia):
+    """PG_PASSWORD= no .env é engano de preenchimento, não senha vazia."""
+    monkeypatch.setenv("PG_USER", "giulia_ro")
+    monkeypatch.setenv("PG_PASSWORD", "s3nh4")
+    monkeypatch.setenv(vazia, "")
+    with pytest.raises(ConfiguracaoAusente):
+        PostgresDatabases.get_database_uri("ecommerce")
+
+
+def test_erro_de_configuracao_nao_vaza_a_senha(monkeypatch):
+    monkeypatch.setenv("PG_PASSWORD", "s3nh4-secreta")
+    monkeypatch.delenv("PG_USER", raising=False)
+    with pytest.raises(ConfiguracaoAusente) as e:
+        PostgresDatabases.get_database_uri("ecommerce")
+    assert "s3nh4-secreta" not in str(e.value)
+
+
+def test_host_e_porta_seguem_com_padrao(monkeypatch):
+    """Errar host/porta não muda privilégio — a conexão só falha."""
+    monkeypatch.delenv("PG_HOST", raising=False)
+    monkeypatch.delenv("PG_PORT", raising=False)
+    monkeypatch.setenv("PG_USER", "giulia_ro")
+    monkeypatch.setenv("PG_PASSWORD", "s3nh4")
+    assert "@localhost:5432/" in PostgresDatabases.get_database_uri("ecommerce")

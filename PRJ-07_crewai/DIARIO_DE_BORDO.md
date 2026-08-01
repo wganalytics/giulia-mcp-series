@@ -17,14 +17,35 @@
 | **Segredos** | `LLM_MODEL` + chave do provider + credenciais PG (use role somente-leitura) |
 | **Jira** | `MCP-5` (épico) · `MCP-14` `MCP-15` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-01
 
 - **Funcional:** sim — pergunta em português devolve dados reais em ~2s
-- **Testes:** 62, passando (47 de lógica pura + 15 de integração com `PRJ07_TEST_DSN` definido)
+- **Testes:** 68, passando (53 de lógica pura + 15 de integração com `PRJ07_TEST_DSN` definido)
 - **Expõe:** 2 tools: `buscar_dados_sql`, `listar_databases`
 - **Pendências:** nenhuma — somente-leitura garantido por sessão `readonly=True` no PostgreSQL
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-01
+**Agente:** Claude Code (Opus 5)
+**Foco:** Credencial de banco sem valor padrão
+
+**Features entregues:**
+- `PG_USER` e `PG_PASSWORD` passaram a ser obrigatórias: `_obrigatorio()` levanta `ConfiguracaoAusente` em vez de cair num default. `PG_HOST` e `PG_PORT` seguem com padrão — errar neles não muda privilégio, só falha a conexão
+- 6 testes novos (62 → 68): variável ausente, variável vazia, mensagem de erro que não vaza a senha, e host/porta mantendo o padrão
+- `.env.example`: linha em branco + comentário entre `PG_PASSWORD=` e `PG_ECOMMERCE_DB=` — sem isso a regra `generic-api-key` do gitleaks atravessava a quebra de linha e apontava o nome do banco como segredo
+
+**Decisões arquiteturais:**
+- **Credencial não tem valor padrão.** `PG_USER` caía em `postgres` — o superusuário — e `PG_PASSWORD` numa senha conhecida. A conexão podia ter sucesso com privilégio errado, em silêncio, contradizendo o desenho somente-leitura que é a tese do projeto. Falha de configuração tem que aparecer na configuração
+
+**Problemas encontrados:**
+- O fallback foi encontrado por leitura, não por teste: nenhum teste exercitava o caminho da variável ausente, então o default nunca era visto
+- O gitleaks reportou falso positivo no `.env.example` (linha vazia + linha seguinte capturada como valor). Confirmado por hexdump antes de mexer
+
+**Próximos passos:**
+- Considerar mover a montagem da URI para fora do f-string, para a senha não transitar em string que possa ir para log
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -37,7 +58,7 @@
 - Catálogo de bancos saiu do `if/elif` do servidor para `PostgresDatabases` (nome + schema YAML por entrada), com nomes resolvidos a cada chamada em vez de no import
 - `buscar_database_name`, que ignorava o argumento e devolvia string fixa, virou `listar_databases()`
 - README ganhou seção Segurança com o SQL do role somente-leitura
-- 62 testes: 47 de lógica pura + 15 de integração contra PostgreSQL 16 real
+- 68 testes: 53 de lógica pura + 15 de integração contra PostgreSQL 16 real
 
 **Decisões arquiteturais:**
 - Duas camadas com papéis distintos: validação na aplicação é conveniência (erro legível, falha barata, barra múltiplos statements); a transação read-only do PostgreSQL é a garantia — quem recusa escrita é o banco, não Python
