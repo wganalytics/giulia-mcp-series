@@ -1,0 +1,28 @@
+[project]
+name = "prj-08-cap09-agent-to-agent"
+version = "0.1.0"
+description = "Protocolo A2A: agentes CrewAI em dois processos via AgentCard/JSON-RPC — Cap. 9 do livro MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Fixado na linha 0.x de propósito: o 1.0 reescreveu a API (AgentCard virou
+    # protobuf, o app saiu de Starlette para FastAPI via a2a.server.routes, e o
+    # cliente trocou A2AClient por create_client com resposta em stream). O código
+    # deste projeto — e o Cap. 9 do livro — usam a API 0.x. Migrar é uma tarefa
+    # própria, não um bump de versão.
+    "a2a-sdk>=0.3,<1.0",
+    "crewai>=1.6.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.4",
+    "python-dotenv>=1.2.2",
+    "starlette>=1.3.1",
+    "uvicorn>=0.49.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

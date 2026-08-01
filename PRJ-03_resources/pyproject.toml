@@ -1,0 +1,19 @@
+[project]
+name = "prj-03-cap04-resources"
+version = "0.1.0"
+description = "Servidor MCP de Resources: estáticos, arquivo e templates dinâmicos — Cap. 4 do livro MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=3.4.2",
+    "mcp[cli]>=1.28.1",
+    "python-dotenv>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

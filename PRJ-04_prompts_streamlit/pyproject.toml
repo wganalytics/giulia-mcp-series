@@ -1,0 +1,22 @@
+[project]
+name = "prj-04-cap05-prompts-streamlit"
+version = "0.1.0"
+description = "Chat Streamlit + MCP com auto-seleção de prompt por LLM (multi-provider) — Cap. 5 do livro MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "litellm>=1.50.0",
+    "fastmcp>=3.4.2",
+    "mcp[cli]>=1.28.1",
+    "python-dotenv>=1.2.2",
+    "pyyaml>=6.0.3",
+    "streamlit>=1.58.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

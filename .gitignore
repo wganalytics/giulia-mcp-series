@@ -1,0 +1,24 @@
+# Segredos
+.env
+**/.env
+
+# Material de terceiro — NUNCA versionar.
+# O livro que originou a série é obra protegida por copyright.
+*.pdf
+*.epub
+data/pdf_text.txt
+
+# Banco com dados reais (PRJ-05 cria em runtime)
+*.db
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store

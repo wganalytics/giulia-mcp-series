@@ -1,0 +1,21 @@
+[project]
+name = "prj-02-cap03-mcp-client"
+version = "0.1.0"
+description = "Cliente MCP com seleção de tool por LLM (multi-provider via LiteLLM) — Cap. 3 do livro MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "litellm>=1.50.0",
+    "mcp[cli]>=1.28.1",
+    "python-dotenv>=1.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

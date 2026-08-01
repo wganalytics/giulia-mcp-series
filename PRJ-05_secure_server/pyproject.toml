@@ -1,0 +1,20 @@
+[project]
+name = "prj-05-cap06-secure-server"
+version = "0.1.0"
+description = "Servidor MCP com autenticação por API Key (bcrypt + SQLite) — Cap. 6 do livro MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "fastmcp>=3.4.2",
+    "mcp[cli]>=1.28.1",
+    "python-dotenv>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

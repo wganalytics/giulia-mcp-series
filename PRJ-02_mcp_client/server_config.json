@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "ping_server": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "../PRJ-01_ping_server",
+        "run",
+        "src/ping_server.py"
+      ]
+    }
+  }
+}
