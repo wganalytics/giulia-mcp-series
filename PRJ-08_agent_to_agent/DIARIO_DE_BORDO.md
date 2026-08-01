@@ -19,7 +19,7 @@
 ## 📊 Estado — 2026-07-31
 
 - **Funcional:** sim — servidor publica AgentCard, cliente descobre e a Crew local vira o texto em tweet
-- **Testes:** 17, passando (`uv run pytest`)
+- **Testes:** 23, passando (`uv run pytest`)
 - **Expõe:** AgentCard público em `/.well-known/agent-card.json` com a skill `redator`
 - **Pendências:** `a2a-sdk` fixado em `<1.0`: a 1.x reescreveu a API (AgentCard virou protobuf, app foi para FastAPI, cliente virou stream). Migrar é tarefa própria
 

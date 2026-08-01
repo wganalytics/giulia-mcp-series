@@ -117,3 +117,59 @@ def test_erro_inesperado_nao_e_engolido(monkeypatch):
 
     with pytest.raises(TypeError):
         ClientA2A("http://x")._run("tema")
+
+
+# --------------------------------------------------------------------------
+# O RemoteAgent precisa herdar o provider configurado
+#
+# Achado rodando a Crew de verdade: só o agente redator recebia `llm`. O
+# RemoteAgent ficava sem, o CrewAI aplicava o LLM padrão dele (OpenAI) e a Crew
+# inteira morria com "OPENAI_API_KEY is required" mesmo com LLM_MODEL apontando
+# para Gemini. Nenhum teste pegava porque nenhum construía o agente.
+#
+# Construir um Agent faz o CrewAI instanciar o cliente do provider, que valida a
+# credencial. Por isso os testes injetam chaves fictícias: exercitam a escolha do
+# provider sem tocar a rede.
+# --------------------------------------------------------------------------
+
+import remote_agent as ra  # noqa: E402
+
+PROVIDERS = {
+    "gemini/gemini-2.5-flash": "GEMINI_API_KEY",
+    "anthropic/claude-3-5-sonnet-20240620": "ANTHROPIC_API_KEY",
+    "openrouter/openai/gpt-4o-mini": "OPENROUTER_API_KEY",
+    "gpt-4o-mini": "OPENAI_API_KEY",
+}
+
+
+@pytest.fixture
+def credenciais_falsas(monkeypatch):
+    for var in set(PROVIDERS.values()):
+        monkeypatch.setenv(var, "chave-de-teste-nao-usada")
+
+
+def _modelo(agente):
+    """Nome do modelo. O CrewAI descarta o prefixo de provider (`gemini/...`)."""
+    llm = agente.llm
+    return str(getattr(llm, "model", llm))
+
+
+@pytest.mark.parametrize("modelo", list(PROVIDERS))
+def test_remote_agent_usa_o_provider_do_ambiente(monkeypatch, credenciais_falsas, modelo):
+    monkeypatch.setenv("LLM_MODEL", modelo)
+    agente = ra.RemoteAgent(server_url="http://localhost:9999")
+    # basta o nome do modelo: o CrewAI já resolveu (e removeu) o prefixo do provider
+    assert modelo.split("/")[-1] in _modelo(agente)
+
+
+def test_llm_explicito_tem_precedencia_sobre_o_ambiente(monkeypatch, credenciais_falsas):
+    monkeypatch.setenv("LLM_MODEL", "gemini/gemini-2.5-flash")
+    agente = ra.RemoteAgent(server_url="http://localhost:9999", llm="gpt-4o-mini")
+    assert "gpt-4o-mini" in _modelo(agente)
+
+
+def test_a_tool_a2a_continua_registrada(monkeypatch, credenciais_falsas):
+    """A correção do llm não pode ter mexido no que o agente sabe fazer."""
+    monkeypatch.setenv("LLM_MODEL", "gemini/gemini-2.5-flash")
+    agente = ra.RemoteAgent(server_url="http://localhost:9999")
+    assert [t.name for t in agente.tools] == ["Ferramenta A2A"]

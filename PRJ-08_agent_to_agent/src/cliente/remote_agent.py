@@ -1,4 +1,6 @@
 """Agente CrewAI que empacota um agente remoto A2A como se fosse uma tool local."""
+import os
+
 from crewai import Agent
 from crewai.tools import BaseTool
 from pydantic import Field
@@ -41,6 +43,10 @@ class RemoteAgent(Agent):
         kwargs.setdefault(
             "backstory", "Você é um agente que busca conteúdo em um servidor A2A"
         )
+        # Sem isto o CrewAI aplica o LLM padrão dele — OpenAI — e a Crew inteira
+        # falha com "OPENAI_API_KEY is required" mesmo com LLM_MODEL apontando para
+        # outro provider. O agente vizinho recebia `llm`; este, não.
+        kwargs.setdefault("llm", os.getenv("LLM_MODEL", "gpt-4o-mini"))
 
         remote_tool = ClientA2ACrewAI(client_a2a=ClientA2A(server_url=server_url))
         # Lista nova: `kwargs.get('tools', [])` + append mutava a lista do chamador.

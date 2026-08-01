@@ -7,7 +7,7 @@ entre processos separados.
 Servidor **e** cliente escritos à mão sobre transporte stdio — sem framework de
 agente escondendo o protocolo.
 
-**1.830 linhas · 206 testes · os 8 rodam de verdade.**
+**1.830 linhas · 212 testes · os 8 rodam de verdade.**
 
 ---
 
@@ -22,7 +22,7 @@ agente escondendo o protocolo.
 | 05 | [`secure_server`](PRJ-05_secure_server) | autenticação por API key: bcrypt + índice SHA-256, arquitetura em camadas | 33 |
 | 06 | [`whatsapp`](PRJ-06_whatsapp) | 4 tools sobre a Evolution API — leitura de grupos e envio de mensagem | 35 |
 | 07 | [`crewai`](PRJ-07_crewai) | text-to-SQL multi-agente com **defesa em duas camadas** contra SQL injection | 73 |
-| 08 | [`agent_to_agent`](PRJ-08_agent_to_agent) | A2A: AgentCard publicado, descoberta em runtime, agente remoto como tool local | 17 |
+| 08 | [`agent_to_agent`](PRJ-08_agent_to_agent) | A2A: AgentCard publicado, descoberta em runtime, agente remoto como tool local | 23 |
 
 Cada projeto tem `README.md` próprio, `specs/` e um `DIARIO_DE_BORDO.md` com as
 decisões e os problemas encontrados.
@@ -80,14 +80,15 @@ Não há modo de demonstração em nenhum dos 8. Toda integração toca o sistem
 - o A2A sobe **dois processos** que se descobrem por `AgentCard` em runtime
 - a API key é verificada com **bcrypt** contra SQLite
 
-**206 testes** cobrem isso sem exigir credencial: o que depende de rede usa dublê de
+**212 testes** cobrem isso sem exigir credencial: o que depende de rede usa dublê de
 transporte (`httpx.MockTransport`), e o que depende de banco roda contra um
 **PostgreSQL 16 real** em Docker quando `PRJ07_TEST_DSN` está definida.
 
-**15 defeitos corrigidos** no caminho. Cinco eram invisíveis a teste de import e só
-apareceram exercitando o protocolo de verdade — entre eles um resource template que
-não encontrava **nenhum** contato, e um prompt que existia no `list_prompts` e
-explodia no `get_prompt`.
+**18 defeitos corrigidos** no caminho. Oito só apareceram executando de verdade — entre
+eles um resource template que não encontrava **nenhum** contato, um prompt que existia
+no `list_prompts` e explodia no `get_prompt`, e um agente de uma Crew que ficava sem
+`llm` e derrubava tudo com `OPENAI_API_KEY is required` mesmo com outro provider
+configurado.
 
 ## ⚠️ Avisos
 

@@ -11,7 +11,7 @@ dependencies = [
     # deste projeto usam a API 0.x. Migrar é uma tarefa
     # própria, não um bump de versão.
     "a2a-sdk>=0.3,<1.0",
-    "crewai>=1.6.1",
+    "crewai[anthropic,google-genai,litellm]>=1.6.1",
     "httpx>=0.28.1",
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.2",
