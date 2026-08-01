@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP com tools de health-check — o exemplo introdutório da série |
-| **Origem** | Cap. 2 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · mcp[cli] · uv |
 | **Como roda** | `uv run python src/ping_server.py` |
 | **Depende de** | nada |
@@ -62,7 +61,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

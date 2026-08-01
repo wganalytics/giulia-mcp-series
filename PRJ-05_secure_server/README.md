@@ -3,8 +3,7 @@
 Servidor **MCP** (FastMCP, transporte `stdio`) cujas *tools* só executam mediante uma
 **API Key válida**. As chaves são geradas com `secrets.token_urlsafe`, **hasheadas com
 bcrypt** e guardadas em SQLite; a validação usa `bcrypt.checkpw`. Senhas de usuário também
-são hasheadas com bcrypt. Corresponde ao **Capítulo 6** do livro *Model Context Protocol*
-(Sandeco).
+são hasheadas com bcrypt.
 
 ## Arquitetura
 

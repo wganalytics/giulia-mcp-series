@@ -2,7 +2,6 @@
 
 Cliente **MCP** que conecta (via `stdio`) ao servidor do **PRJ-01**, lista as tools e usa
 um **LLM** para escolher qual tool chamar a partir de uma pergunta em linguagem natural.
-Corresponde ao **Capítulo 3** do livro *Model Context Protocol* (Sandeco).
 
 ## Multi-provider (Claude / OpenAI / Gemini / OpenRouter)
 

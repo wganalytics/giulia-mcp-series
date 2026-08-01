@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP que dá a um agente tools para operar o WhatsApp via Evolution API |
-| **Origem** | Cap. 7 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · httpx · uv |
 | **Como roda** | `uv run python src/evoapi_mcp.py` |
 | **Depende de** | instância **Evolution API v2** com número pareado |
@@ -66,7 +65,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

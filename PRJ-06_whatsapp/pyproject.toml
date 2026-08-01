@@ -1,7 +1,7 @@
 [project]
 name = "prj-06-cap07-whatsapp"
 version = "0.1.0"
-description = "Servidor MCP de WhatsApp via Evolution API (grupos, histórico, envio) — Cap. 7 do livro MCP"
+description = "Servidor MCP de WhatsApp via Evolution API (grupos, histórico, envio)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

@@ -1,7 +1,7 @@
 [project]
 name = "prj-07-cap08-crewai"
 version = "0.1.0"
-description = "Add your description here"
+description = "Text-to-SQL multi-agente sobre MCP com guard de SQL e sessão read-only"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

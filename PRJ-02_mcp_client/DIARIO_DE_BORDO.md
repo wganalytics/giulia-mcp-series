@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Cliente MCP que usa um LLM para escolher qual tool chamar a partir de linguagem natural |
-| **Origem** | Cap. 3 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · litellm · mcp[cli] · uv |
 | **Como roda** | `uv run python src/client.py "faça um ping"` |
 | **Depende de** | **PRJ-01** (sobe o servidor via `server_config.json`) |
@@ -64,7 +63,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

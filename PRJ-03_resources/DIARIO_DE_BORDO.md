@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP que demonstra **Resources** — expor dados em vez de ações |
-| **Origem** | Cap. 4 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · mcp[cli] · uv |
 | **Como roda** | `uv run python src/resources_server.py` |
 | **Depende de** | `data/contatos.csv` (dados fictícios de demonstração) |
@@ -62,7 +61,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

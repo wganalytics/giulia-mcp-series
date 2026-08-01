@@ -1,7 +1,7 @@
 [project]
 name = "prj-04-cap05-prompts-streamlit"
 version = "0.1.0"
-description = "Chat Streamlit + MCP com auto-seleção de prompt por LLM (multi-provider) — Cap. 5 do livro MCP"
+description = "Chat Streamlit + MCP com auto-seleção de prompt por LLM (multi-provider)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

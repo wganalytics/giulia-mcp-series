@@ -1,7 +1,7 @@
 [project]
 name = "prj-02-cap03-mcp-client"
 version = "0.1.0"
-description = "Cliente MCP com seleção de tool por LLM (multi-provider via LiteLLM) — Cap. 3 do livro MCP"
+description = "Cliente MCP com seleção de tool por LLM (multi-provider via LiteLLM)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Chat Streamlit que lista os **Prompts** MCP e deixa o LLM escolher o mais adequado |
-| **Origem** | Cap. 5 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · streamlit · litellm · fastmcp · uv |
 | **Como roda** | `uv run streamlit run src/chat.py` |
 | **Depende de** | `src/server.py` (o próprio cliente sobe o servidor de prompts) |
@@ -65,7 +64,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

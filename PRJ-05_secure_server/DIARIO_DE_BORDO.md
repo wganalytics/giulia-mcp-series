@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP cujas tools só executam mediante API Key válida (bcrypt + SQLite) |
-| **Origem** | Cap. 6 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · bcrypt · sqlite3 · uv |
 | **Como roda** | `uv run python src/server_seguro.py` |
 | **Depende de** | bootstrap por CLI: `create-user` → `gen-key` → `.env` |
@@ -47,7 +46,7 @@
 - Destrutor como ponto de liberação de recurso: roda em hora indeterminada e engole exceção
 
 **Próximos passos:**
-- Autenticação de chamador de verdade exigiria transporte HTTP com a chave na requisição — fora do escopo do Cap. 6.
+- Autenticação de chamador de verdade exigiria transporte HTTP com a chave na requisição — fora do escopo deste projeto.
 
 ### Sessão #002 — 2026-07-01
 **Agente:** Antigravity (Gemini 3.1 Pro)
@@ -67,7 +66,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

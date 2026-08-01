@@ -2,8 +2,7 @@
 .env
 **/.env
 
-# Material de terceiro — NUNCA versionar.
-# O livro que originou a série é obra protegida por copyright.
+# Documentos de referência — não versionar.
 *.pdf
 *.epub
 data/pdf_text.txt

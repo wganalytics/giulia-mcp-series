@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Text-to-SQL: agente CrewAI gera SELECT a partir do schema e consulta PostgreSQL |
-| **Origem** | Cap. 8 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · crewai · fastmcp · psycopg2 · streamlit · uv |
 | **Como roda** | `uv run streamlit run src/main.py` |
 | **Depende de** | PostgreSQL com os bancos `ecommerce` e `clinica` (seeds em `data/`) |
@@ -104,7 +103,6 @@ e `de_dsn` reconstruindo os campos.
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

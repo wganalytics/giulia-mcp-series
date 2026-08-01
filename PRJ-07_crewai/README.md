@@ -3,10 +3,9 @@
 Sistema **multi-agente CrewAI** + servidor **MCP** que faz **text-to-SQL**: o usuário
 conversa (Streamlit), um agente CrewAI usa as tools MCP, o servidor gera **SQL real** a
 partir de linguagem natural (com base no schema) e consulta bancos **PostgreSQL** de
-demonstração (`ecommerce` e `clinica`). Corresponde ao **Capítulo 8** do livro *Model
-Context Protocol* (Sandeco).
+demonstração (`ecommerce` e `clinica`).
 
-Os mocks originais (SQL fixo, `MockCursor`, URI falsa) foram substituídos por: geração de
+Os mocks iniciais (SQL fixo, `MockCursor`, URI falsa) foram substituídos por: geração de
 SQL por um Crew real (`crew_ai_query.py`), conexão `psycopg2` real (`postgres_connection.py`)
 e URI a partir de env (`postgres_databases.py`). Consultas são **somente-leitura** — ver
 [Segurança](#segurança).

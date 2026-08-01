@@ -10,7 +10,6 @@
 | | |
 |---|---|
 | **O que é** | Protocolo **A2A**: dois processos independentes conversando por HTTP/JSON-RPC |
-| **Origem** | Cap. 9 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · a2a-sdk (0.x) · crewai · uvicorn · uv |
 | **Como roda** | `uv run python -m src.server  +  uv run python src/cliente/main.py "tema"` |
 | **Depende de** | dois terminais: servidor A2A e cliente |
@@ -42,7 +41,7 @@
 - 17 testes (`tests/test_a2a.py`) cobrindo AgentCard e parsing da resposta
 
 **Decisões arquiteturais:**
-- Fixar o SDK em vez de migrar para 1.x: a migração é tarefa própria (AgentCard virou protobuf, app saiu de Starlette para FastAPI via `a2a.server.routes`, cliente virou `create_client` com stream) e divergiria do Cap. 9 do livro
+- Fixar o SDK em vez de migrar para 1.x: a migração é tarefa própria (AgentCard virou protobuf, app saiu de Starlette para FastAPI via `a2a.server.routes`, cliente virou `create_client` com stream)
 
 **Problemas encontrados:**
 - Os três defeitos de execução só apareceram ao rodar de verdade — os testes de import não os pegariam. A mensagem de erro tipada introduzida nesta sessão foi o que revelou o JSON-RPC -32603 rapidamente
@@ -68,7 +67,6 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
-- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

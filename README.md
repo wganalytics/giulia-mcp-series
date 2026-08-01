@@ -70,13 +70,10 @@ alcança**: em transporte stdio o servidor é processo filho do cliente, e a cha
 de variável de ambiente do próprio servidor. Isso é um **gate de configuração**, não
 autenticação de chamador.
 
-## Origem e atribuição
+## Como esta série foi construída
 
-Os 8 projetos partem dos **capítulos 2 a 9** do livro *Model Context Protocol*, de
-Sandeco Macedo. O livro não está incluído neste repositório e não é redistribuído
-aqui — apenas o código autoral escrito a partir dele.
-
-O que diferencia esta versão dos exemplos do livro:
+Cada projeto começou como uma versão mínima, com as integrações simuladas, e foi
+levado até funcionar de verdade:
 
 - **cada mock virou implementação real** — o health-check simulado virou socket TCP,
   o `print()` de envio virou integração com gateway real, o cursor falso com SQL fixo

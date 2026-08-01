@@ -2,8 +2,7 @@
 
 Chat em **Streamlit** que conecta a um servidor **MCP** (via `stdio`), lista os *prompts*
 MCP disponíveis, usa um **LLM** para escolher automaticamente o prompt mais adequado à
-pergunta e conduz a conversa. Corresponde ao **Capítulo 5** do livro *Model Context
-Protocol* (Sandeco).
+pergunta e conduz a conversa.
 
 ## Multi-provider (Claude / OpenAI / Gemini / OpenRouter)
 
