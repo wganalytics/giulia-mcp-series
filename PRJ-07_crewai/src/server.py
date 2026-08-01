@@ -38,8 +38,8 @@ def buscar_dados_sql(query: str, database_name: str) -> str:
             return f"Consulta rejeitada ({e}): {sql_bruto[:200]}"
 
         # Camada 2 — garantia: a sessão é read-only, quem recusa escrita é o PostgreSQL.
-        database = PostgresDatabases.get_database_uri(database_name)
-        with PostgresConnection(database_uri=database) as conn:
+        conexao = PostgresDatabases.get_connection_params(database_name)
+        with PostgresConnection(conexao) as conn:
             cursor = conn.cursor
             cursor.execute(sql)
             results = cursor.fetchall()

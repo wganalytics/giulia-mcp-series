@@ -31,7 +31,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture
 def conn():
-    c = PostgresConnection(database_uri=DSN)
+    c = PostgresConnection(DSN)
     c.connect()
     yield c
     c.close()
@@ -88,7 +88,7 @@ def test_tabela_continua_intacta_apos_as_tentativas(conn):
 # --------------------------------------------------------------------------
 
 def test_statement_timeout_cancela_query_longa():
-    c = PostgresConnection(database_uri=DSN, statement_timeout_ms=300)
+    c = PostgresConnection(DSN, statement_timeout_ms=300)
     c.connect()
     try:
         with pytest.raises(psycopg2.errors.QueryCanceled):
@@ -99,7 +99,7 @@ def test_statement_timeout_cancela_query_longa():
 
 def test_statement_timeout_vem_do_ambiente(monkeypatch):
     monkeypatch.setenv("PG_STATEMENT_TIMEOUT_MS", "1234")
-    assert PostgresConnection(database_uri=DSN).statement_timeout_ms == 1234
+    assert PostgresConnection(DSN).statement_timeout_ms == 1234
 
 
 # --------------------------------------------------------------------------
@@ -107,14 +107,14 @@ def test_statement_timeout_vem_do_ambiente(monkeypatch):
 # --------------------------------------------------------------------------
 
 def test_context_manager_fecha_a_conexao():
-    with PostgresConnection(database_uri=DSN) as c:
+    with PostgresConnection(DSN) as c:
         c.cursor.execute("SELECT 1")
         assert c.cursor.fetchone()[0] == 1
     assert c.conn.closed
 
 
 def test_close_e_idempotente():
-    c = PostgresConnection(database_uri=DSN)
+    c = PostgresConnection(DSN)
     c.connect()
     c.close()
     c.close()  # não pode levantar

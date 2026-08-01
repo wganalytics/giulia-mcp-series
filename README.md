@@ -7,7 +7,7 @@ entre processos separados.
 Servidor **e** cliente escritos à mão sobre transporte stdio — sem framework de
 agente escondendo o protocolo.
 
-**1.830 linhas · 189 testes · os 8 rodam de verdade.**
+**1.830 linhas · 194 testes · os 8 rodam de verdade.**
 
 ---
 
@@ -21,7 +21,7 @@ agente escondendo o protocolo.
 | 04 | [`prompts_streamlit`](PRJ-04_prompts_streamlit) | prompt versionado no servidor, selecionado por LLM em runtime, com chat Streamlit | 6 |
 | 05 | [`secure_server`](PRJ-05_secure_server) | autenticação por API key: bcrypt + índice SHA-256, arquitetura em camadas | 33 |
 | 06 | [`whatsapp`](PRJ-06_whatsapp) | 4 tools sobre a Evolution API — leitura de grupos e envio de mensagem | 35 |
-| 07 | [`crewai`](PRJ-07_crewai) | text-to-SQL multi-agente com **defesa em duas camadas** contra SQL injection | 68 |
+| 07 | [`crewai`](PRJ-07_crewai) | text-to-SQL multi-agente com **defesa em duas camadas** contra SQL injection | 73 |
 | 08 | [`agent_to_agent`](PRJ-08_agent_to_agent) | A2A: AgentCard publicado, descoberta em runtime, agente remoto como tool local | 17 |
 
 Cada projeto tem `README.md` próprio, `specs/` e um `DIARIO_DE_BORDO.md` com as
@@ -81,8 +81,8 @@ O que diferencia esta versão dos exemplos do livro:
 - **cada mock virou implementação real** — o health-check simulado virou socket TCP,
   o `print()` de envio virou integração com gateway real, o cursor falso com SQL fixo
   virou PostgreSQL com carga versionada
-- **189 testes onde havia zero**
-- **12 defeitos corrigidos**, três deles invisíveis a teste de import — só apareceram
+- **194 testes onde havia zero**
+- **13 defeitos corrigidos**, três deles invisíveis a teste de import — só apareceram
   ao executar
 
 ## ⚠️ Avisos

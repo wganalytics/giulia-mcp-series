@@ -20,7 +20,7 @@
 ## 📊 Estado — 2026-08-01
 
 - **Funcional:** sim — pergunta em português devolve dados reais em ~2s
-- **Testes:** 68, passando (53 de lógica pura + 15 de integração com `PRJ07_TEST_DSN` definido)
+- **Testes:** 73, passando (58 de lógica pura + 15 de integração com `PRJ07_TEST_DSN` definido)
 - **Expõe:** 2 tools: `buscar_dados_sql`, `listar_databases`
 - **Pendências:** nenhuma — somente-leitura garantido por sessão `readonly=True` no PostgreSQL
 
@@ -43,7 +43,23 @@
 - O gitleaks reportou falso positivo no `.env.example` (linha vazia + linha seguinte capturada como valor). Confirmado por hexdump antes de mexer
 
 **Próximos passos:**
-- Considerar mover a montagem da URI para fora do f-string, para a senha não transitar em string que possa ir para log
+- ~~Mover a montagem da URI para fora do f-string~~ — feito ainda em 01/Ago, ver abaixo
+
+**Sessão #004 (continuação) — senha fora da string**
+
+`get_database_uri` foi substituído por `get_connection_params`, que devolve
+`ParametrosConexao` — dataclass congelada com `password` em `field(repr=False)` e
+`__str__` mascarado (`postgresql://giulia_ro:***@host:porta/banco`). A senha sai
+apenas em `.kwargs()`, no `psycopg2.connect(**...)`.
+
+Motivo concreto: o servidor MCP devolve `f"Erro ao buscar dados: {e}"` **para o
+agente**. Com a URI montada, bastava um traceback carregando essa string para a senha
+sair do processo. `PostgresConnection` aceita DSN em texto por conveniência dos testes
+de integração, mas converte no `__init__` — o objeto nunca guarda a string.
+
+5 testes novos (68 → 73): `repr` sem senha, `__str__` mascarado, interpolação em
+mensagem de erro no formato exato que o servidor usa, senha presente só em `kwargs()`,
+e `de_dsn` reconstruindo os campos.
 
 ---
 
