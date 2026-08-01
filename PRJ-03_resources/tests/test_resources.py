@@ -99,3 +99,36 @@ def test_saudacao_personalizada():
 
 def test_servidor_expoe_cinco_resources():
     assert rs.mcp.name == "resources_server"
+
+
+# --------------------------------------------------------------------------
+# Parâmetro de URI chega percent-encoded
+#
+# Achado por prova funcional, não por teste: `contato://Ana Silva` é rejeitado
+# pelo protocolo (espaço cru em URI) e `contato://Ana%20Silva` chegava aqui como
+# "Ana%20Silva" literal. Como TODO nome do CSV tem espaço, o template não
+# encontrava nenhum contato. Os testes não pegavam porque chamavam a função
+# direto, com o nome já legível.
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("codificado,esperado", [
+    ("Ana%20Silva", "Ana Silva"),
+    ("Julia%20Lima", "Julia Lima"),
+    ("Jo%C3%A3o%20Pereira", "João Pereira"),
+])
+def test_contato_aceita_nome_percent_encoded(codificado, esperado):
+    assert esperado in contato(codificado)
+
+
+def test_contato_ainda_aceita_nome_legivel():
+    """A decodificação não pode quebrar quem chama a função direto."""
+    assert "Ana Silva" in contato("Ana Silva")
+
+
+def test_saudacao_decodifica_o_nome():
+    assert saudacao("Carlos%20Souza") == "Olá, Carlos Souza! Bem-vindo ao MCP."
+
+
+def test_acentuacao_sobrevive_ao_round_trip():
+    assert "joao.pereira@email.com" in contato("Jo%C3%A3o%20Pereira")

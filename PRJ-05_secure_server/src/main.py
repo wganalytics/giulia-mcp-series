@@ -1,6 +1,6 @@
 """CLI de gerenciamento do servidor MCP seguro.
 
-Permite semear o banco (criar usuário + gerar API key) sem depender do stub antigo.
+Permite semear o banco: criar usuário e gerar API key pela linha de comando.
 Exemplos:
     uv run python src/main.py create-user --name "Giulia" --email giulia@ex.com --password segredo
     uv run python src/main.py gen-key --user-id 1 --name "chave-dev"

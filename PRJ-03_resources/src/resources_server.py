@@ -1,10 +1,26 @@
 import os
 import csv
 from pathlib import Path
+from urllib.parse import unquote
+
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
+
+
+def _param(valor: str) -> str:
+    """Decodifica um parâmetro vindo da URI.
+
+    O cliente MCP não pode mandar espaço cru numa URI — ``contato://Ana Silva`` é
+    rejeitado como parâmetro inválido antes de chegar aqui. A forma correta é
+    ``contato://Ana%20Silva``, e então o servidor recebe a string **percent-encoded**.
+
+    Sem esta decodificação o template não encontrava **nenhum** contato: todo nome do
+    CSV tem espaço. O defeito não aparecia nos testes porque eles chamavam a função
+    diretamente, com o nome já legível, pulando a camada de URI.
+    """
+    return unquote(valor).strip()
 
 # Caminhos robustos relativos à raiz do projeto (antes eram relativos ao CWD e quebravam).
 BASE = Path(__file__).resolve().parent.parent
@@ -35,6 +51,7 @@ def contatos_csv() -> bytes:
 @mcp.resource("contato://{nome}")
 def contato(nome: str) -> str:
     """Resource template dinâmico: busca UM contato pelo nome dentro do CSV."""
+    nome = _param(nome)
     with CONTATOS_PATH.open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             if row["nome"].lower() == nome.lower():
@@ -44,7 +61,7 @@ def contato(nome: str) -> str:
 @mcp.resource("greeting://{nome}")
 def saudacao(nome: str) -> str:
     """Retorna uma saudação personalizada."""
-    return f"Olá, {nome}! Bem-vindo ao MCP."
+    return f"Olá, {_param(nome)}! Bem-vindo ao MCP."
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")

@@ -1,6 +1,6 @@
 """Cliente HTTP real da Evolution API (gateway self-hosted de WhatsApp).
 
-Substitui as implementações MOCK. Toda configuração vem de variáveis de ambiente
+Toda configuração vem de variáveis de ambiente
 (.env), nunca hardcoded. Alvo: Evolution API v2 (ajuste pontual de campos pode ser
 necessário conforme a versão da sua instância).
 

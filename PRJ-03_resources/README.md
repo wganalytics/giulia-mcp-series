@@ -31,7 +31,7 @@ para um export do seu CRM ou troque o resource por uma consulta a banco/API.
 ## Testes
 
 ```bash
-uv run pytest        # 14 testes
+uv run pytest        # 20 testes
 ```
 
 Cobrem os três formatos de resource e, principalmente, que os caminhos resolvem a partir da raiz do projeto — rodar de outra pasta não pode quebrar.

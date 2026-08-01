@@ -1,5 +1,5 @@
 from fastmcp import FastMCP
-from fastmcp.prompts.prompt import Message, PromptMessage, TextContent
+from fastmcp.prompts.prompt import Message
 
 mcp = FastMCP(name="prompt_server")
 
@@ -14,10 +14,16 @@ def ask_about_topic(topic: str) -> str:
     return f"Você poderia explicar o conceito de '{topic}'?"
 
 @mcp.prompt()
-def generate_code_request(language: str, task_description: str) -> PromptMessage:
-    """Gera uma mensagem do usuário solicitando geração de código."""
+def generate_code_request(language: str, task_description: str) -> list[Message]:
+    """Gera uma mensagem do usuário solicitando geração de código.
+
+    Devolve ``list[Message]``. Devolver ``PromptMessage`` cru fazia o fastmcp
+    levantar ``TypeError: Prompt must return str, list[Message], or PromptResult``
+    na renderização — ou seja, o prompt existia no ``list_prompts`` e explodia no
+    ``get_prompt``. Só aparece exercitando o protocolo, não importando o módulo.
+    """
     content = f"Escreva uma função em {language} que realize a seguinte tarefa: {task_description}"
-    return PromptMessage(role="user", content=TextContent(type="text", text=content))
+    return [Message(role="user", content=content)]
 
 @mcp.prompt()
 def debate_agentes(topic: str, agentes: str, debates: str) -> str:

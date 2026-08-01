@@ -19,7 +19,7 @@
 ## 📊 Estado — 2026-07-31
 
 - **Funcional:** sim — verificado por MCP stdio real
-- **Testes:** 14, passando (`uv run pytest`)
+- **Testes:** 20, passando (`uv run pytest`)
 - **Expõe:** 5 resources: 1 estático, 2 de arquivo, 2 templates dinâmicos (`contato://{nome}`, `greeting://{nome}`)
 - **Pendências:** nenhuma
 

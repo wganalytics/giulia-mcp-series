@@ -7,7 +7,7 @@ entre processos separados.
 Servidor **e** cliente escritos à mão sobre transporte stdio — sem framework de
 agente escondendo o protocolo.
 
-**1.830 linhas · 194 testes · os 8 rodam de verdade.**
+**1.830 linhas · 206 testes · os 8 rodam de verdade.**
 
 ---
 
@@ -17,8 +17,8 @@ agente escondendo o protocolo.
 |---|---|---|---|
 | 01 | [`ping_server`](PRJ-01_ping_server) | servidor MCP mínimo; health-check TCP real com latência medida | 12 |
 | 02 | [`mcp_client`](PRJ-02_mcp_client) | cliente que lista tools, traduz para function-calling e deixa o LLM escolher | 4 |
-| 03 | [`resources`](PRJ-03_resources) | as três formas de resource: estático, binário e **template com parâmetro na URI** | 14 |
-| 04 | [`prompts_streamlit`](PRJ-04_prompts_streamlit) | prompt versionado no servidor, selecionado por LLM em runtime, com chat Streamlit | 6 |
+| 03 | [`resources`](PRJ-03_resources) | as três formas de resource: estático, binário e **template com parâmetro na URI** | 20 |
+| 04 | [`prompts_streamlit`](PRJ-04_prompts_streamlit) | prompt versionado no servidor, selecionado por LLM em runtime, com chat Streamlit | 12 |
 | 05 | [`secure_server`](PRJ-05_secure_server) | autenticação por API key: bcrypt + índice SHA-256, arquitetura em camadas | 33 |
 | 06 | [`whatsapp`](PRJ-06_whatsapp) | 4 tools sobre a Evolution API — leitura de grupos e envio de mensagem | 35 |
 | 07 | [`crewai`](PRJ-07_crewai) | text-to-SQL multi-agente com **defesa em duas camadas** contra SQL injection | 73 |
@@ -70,17 +70,24 @@ alcança**: em transporte stdio o servidor é processo filho do cliente, e a cha
 de variável de ambiente do próprio servidor. Isso é um **gate de configuração**, não
 autenticação de chamador.
 
-## Como esta série foi construída
+## Nada aqui é simulado
 
-Cada projeto começou como uma versão mínima, com as integrações simuladas, e foi
-levado até funcionar de verdade:
+Não há modo de demonstração em nenhum dos 8. Toda integração toca o sistema real:
 
-- **cada mock virou implementação real** — o health-check simulado virou socket TCP,
-  o `print()` de envio virou integração com gateway real, o cursor falso com SQL fixo
-  virou PostgreSQL com carga versionada
-- **194 testes onde havia zero**
-- **13 defeitos corrigidos**, três deles invisíveis a teste de import — só apareceram
-  ao executar
+- o health-check abre **socket TCP** e mede latência (`socket.create_connection`)
+- o envio de WhatsApp chama a **Evolution API** e devolve o id da mensagem
+- o text-to-SQL executa em **PostgreSQL**, com carga versionada em `data/seed_*.sql`
+- o A2A sobe **dois processos** que se descobrem por `AgentCard` em runtime
+- a API key é verificada com **bcrypt** contra SQLite
+
+**206 testes** cobrem isso sem exigir credencial: o que depende de rede usa dublê de
+transporte (`httpx.MockTransport`), e o que depende de banco roda contra um
+**PostgreSQL 16 real** em Docker quando `PRJ07_TEST_DSN` está definida.
+
+**15 defeitos corrigidos** no caminho. Cinco eram invisíveis a teste de import e só
+apareceram exercitando o protocolo de verdade — entre eles um resource template que
+não encontrava **nenhum** contato, e um prompt que existia no `list_prompts` e
+explodia no `get_prompt`.
 
 ## ⚠️ Avisos
 

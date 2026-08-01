@@ -3,8 +3,8 @@
 Servidor **MCP** (FastMCP, `stdio`) que dá a um agente LLM *tools* para operar o WhatsApp
 através da **Evolution API** (gateway self-hosted).
 
-As implementações simuladas iniciais (grupos/mensagens fake e envio via `print`) foram
-substituídas por chamadas **reais** à Evolution API (`src/evolution_client.py`).
+Todas as operações são chamadas **reais** à Evolution API (`src/evolution_client.py`) —
+não há modo de simulação.
 
 > ## ⚠️ Este servidor envia mensagem de verdade
 >
@@ -67,7 +67,7 @@ sem rede.
 ## Testes
 
 ```bash
-uv run pytest        # 27 testes, sem tocar a rede (httpx.MockTransport)
+uv run pytest        # 35 testes, sem tocar a rede (httpx.MockTransport)
 ```
 
 Cobrem o reuso do cliente, o fechamento do pool, a validação de configuração, a

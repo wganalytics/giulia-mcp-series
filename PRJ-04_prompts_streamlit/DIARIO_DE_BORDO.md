@@ -19,7 +19,7 @@
 ## 📊 Estado — 2026-07-31
 
 - **Funcional:** sim — prompt selecionado pelo LLM e conversa com contexto preservado
-- **Testes:** 6, passando (`uv run pytest`)
+- **Testes:** 12, passando (`uv run pytest`)
 - **Expõe:** 4 prompts: `saudacao`, `ask_about_topic`, `generate_code_request`, `debate_agentes`
 - **Pendências:** nenhuma
 

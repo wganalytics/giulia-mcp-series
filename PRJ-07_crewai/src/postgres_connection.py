@@ -6,7 +6,7 @@ from postgres_databases import ParametrosConexao
 
 
 class PostgresConnection:
-    """Conexão REAL com PostgreSQL via psycopg2 (substitui o MockCursor).
+    """Conexão com PostgreSQL via psycopg2.
 
     A sessão é aberta em modo **read-only**: quem recusa qualquer escrita é o próprio
     PostgreSQL (erro ``ReadOnlySqlTransaction``), não uma validação em Python. Essa é a
