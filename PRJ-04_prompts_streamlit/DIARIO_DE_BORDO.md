@@ -10,20 +10,49 @@
 | | |
 |---|---|
 | **O que é** | Chat Streamlit que lista os **Prompts** MCP e deixa o LLM escolher o mais adequado |
+| **Origem** | Cap. 5 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · streamlit · litellm · fastmcp · uv |
 | **Como roda** | `uv run streamlit run src/chat.py` |
 | **Depende de** | `src/server.py` (o próprio cliente sobe o servidor de prompts) |
 | **Segredos** | `LLM_MODEL` + chave do provider |
 | **Jira** | `MCP-21` (épico) · `MCP-22` `MCP-23` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — prompt selecionado pelo LLM e conversa com contexto preservado
+- **Funcional:** sim — com Gemini, o LLM escolheu `generate_code_request` (justamente o
+  prompt que estava quebrado) com os argumentos corretos, e o histórico cresceu como esperado
 - **Testes:** 12, passando (`uv run pytest`)
 - **Expõe:** 4 prompts: `saudacao`, `ask_about_topic`, `generate_code_request`, `debate_agentes`
 - **Pendências:** nenhuma
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** Prompt que listava e explodia; testes async ignorados
+
+**Features entregues:**
+- **Corrigido: `generate_code_request` quebrava no `get_prompt`.** Devolvia `PromptMessage`
+  cru, que o fastmcp recusa (`Prompt must return str, list[Message], or PromptResult`).
+  Aparecia normalmente no `list_prompts` — então um agente descobria e escolhia o prompt
+  quebrado. Virou `list[Message]`
+- **Faltava `pytest-asyncio`**: sem ele os testes `async` não rodavam, eram ignorados em
+  silêncio. Adicionado com `asyncio_mode = "auto"`
+- `tests/test_prompts_render.py`: renderiza **todos** os prompts pelo `Client` em memória (6 → 12)
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+
+**Decisões arquiteturais:**
+- Listar não é renderizar. Um prompt só está entregue quando `get_prompt` devolve texto
+
+**Problemas encontrados:**
+- Cobertura de **22%** — `chat.py`, `client.py` e `giulia_ai_mcp_conn.py` sem teste algum
+
+**Próximos passos:**
+- Cobrir o cliente e a conexão MCP, hoje validados só por execução manual
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -64,6 +93,7 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

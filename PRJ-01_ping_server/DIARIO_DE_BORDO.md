@@ -10,20 +10,43 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP com tools de health-check — o exemplo introdutório da série |
+| **Origem** | Cap. 2 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · mcp[cli] · uv |
 | **Como roda** | `uv run python src/ping_server.py` |
 | **Depende de** | nada |
 | **Segredos** | nenhum |
 | **Jira** | `MCP-1` (épico) · `MCP-8` `MCP-9` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — verificado por MCP stdio real
+- **Funcional:** sim — verificado por **stdio real**, com cliente MCP em processo separado:
+  `ping`→`pong`, `echo`, `check_host github.com:443`→`UP 47 ms`, e host fechado→`DOWN [Errno 61]`
 - **Testes:** 12, passando (`uv run pytest`)
 - **Expõe:** 3 tools: `ping`, `echo`, `check_host(host, port, timeout)`
 - **Pendências:** nenhuma
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** Publicação e prova funcional por protocolo
+
+**Features entregues:**
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+- Título do README perdeu o rótulo de nível didático: virou "servidor MCP mínimo"
+
+**Decisões arquiteturais:**
+- Nenhuma mudança de código. O projeto passou na prova funcional sem correção
+
+**Problemas encontrados:**
+- Nenhum. Foi o único da série que atravessou a verificação por protocolo intacto
+
+**Próximos passos:**
+- Nada pendente
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -61,6 +84,7 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

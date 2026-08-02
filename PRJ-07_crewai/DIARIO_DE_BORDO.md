@@ -10,20 +10,51 @@
 | | |
 |---|---|
 | **O que é** | Text-to-SQL: agente CrewAI gera SELECT a partir do schema e consulta PostgreSQL |
+| **Origem** | Cap. 8 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · crewai · fastmcp · psycopg2 · streamlit · uv |
 | **Como roda** | `uv run streamlit run src/main.py` |
 | **Depende de** | PostgreSQL com os bancos `ecommerce` e `clinica` (seeds em `data/`) |
 | **Segredos** | `LLM_MODEL` + chave do provider + credenciais PG (use role somente-leitura) |
 | **Jira** | `MCP-5` (épico) · `MCP-14` `MCP-15` — projeto `MCP` |
 
-## 📊 Estado — 2026-08-01
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — pergunta em português devolve dados reais em ~2s
+- **Funcional:** sim — com Gemini, o Crew leu o schema e gerou `JOIN + GROUP BY + ORDER BY SUM`
+  correto contra PostgreSQL real (6,6s no `ecommerce`); no `clinica`, `COUNT(DISTINCT)` por
+  especialidade. Escrita segue recusada pelo banco (`ReadOnlySqlTransaction`)
 - **Testes:** 73, passando (58 de lógica pura + 15 de integração com `PRJ07_TEST_DSN` definido)
 - **Expõe:** 2 tools: `buscar_dados_sql`, `listar_databases`
 - **Pendências:** nenhuma — somente-leitura garantido por sessão `readonly=True` no PostgreSQL
 
 ## 📝 Registro de Sessões
+
+### Sessão #005 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** Multi-provider era falso; verificação ponta a ponta com Gemini
+
+**Features entregues:**
+- **Corrigido: o CrewAI não usava provider nenhum além de OpenAI.** Diferente do LiteLLM
+  direto, ele exige um *extra* por provider — `Google Gen AI native provider not available`.
+  Anthropic e OpenRouter falhavam igual. O README prometia quatro e entregava um.
+  Resolvido com `crewai[google-genai,anthropic,litellm]`
+- README dizia **38 testes**; são **58** sem banco e **73** com. Corrigido
+- CI com service container `postgres:16-alpine`, criando os 2 bancos e carregando os seeds,
+  **com guarda que falha o job se os testes de integração forem pulados**
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+
+**Decisões arquiteturais:**
+- Erro de configuração não pode virar verde silencioso: `15 skipped` num CI é pior que
+  falha, porque parece sucesso
+
+**Problemas encontrados:**
+- A promessa de multi-provider estava no README desde o início e nunca tinha sido exercitada
+
+**Próximos passos:**
+- Estreitar o `except Exception` do `server.py`, que devolve texto de exceção ao agente
+
+---
 
 ### Sessão #004 — 2026-08-01
 **Agente:** Claude Code (Opus 5)
@@ -103,6 +134,7 @@ e `de_dsn` reconstruindo os campos.
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

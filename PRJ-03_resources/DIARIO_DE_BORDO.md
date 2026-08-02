@@ -10,20 +10,50 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP que demonstra **Resources** — expor dados em vez de ações |
+| **Origem** | Cap. 4 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · mcp[cli] · uv |
 | **Como roda** | `uv run python src/resources_server.py` |
 | **Depende de** | `data/contatos.csv` (dados fictícios de demonstração) |
 | **Segredos** | nenhum — `AGENT_NAME` é opcional |
 | **Jira** | `MCP-3` (épico) · `MCP-10` `MCP-11` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — verificado por MCP stdio real
+- **Funcional:** sim — verificado por **stdio real**: 3 resources, 2 templates,
+  `contato://Ana%20Silva` devolvendo o registro correto
 - **Testes:** 20, passando (`uv run pytest`)
 - **Expõe:** 5 resources: 1 estático, 2 de arquivo, 2 templates dinâmicos (`contato://{nome}`, `greeting://{nome}`)
 - **Pendências:** nenhuma
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** O resource template não encontrava nenhum contato
+
+**Features entregues:**
+- **Corrigido: o template `contato://` estava 100% quebrado.** O parâmetro chega da URI
+  percent-encoded; `contato://Ana Silva` é rejeitado pelo protocolo (espaço cru é URI
+  inválida) e `contato://Ana%20Silva` chegava como string literal `"Ana%20Silva"`. Como
+  **todo nome do CSV tem espaço**, nenhuma busca funcionava
+- `_param()` com `urllib.parse.unquote`, aplicado a `contato://` e `greeting://`
+- 6 testes novos usando a **forma codificada** — a que o protocolo realmente entrega (14 → 20)
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+
+**Decisões arquiteturais:**
+- Teste tem que exercitar a camada onde o defeito pode morar. Chamar `contato("Ana Silva")`
+  direto em Python pula a decodificação de URI inteira — que era exatamente onde estava o bug
+
+**Problemas encontrados:**
+- Os 14 testes passavam e a funcionalidade principal estava morta. Cobertura de 89% não
+  ajudou: o que faltava não era mais teste, era testar no lugar certo
+
+**Próximos passos:**
+- Nada pendente
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -61,6 +91,7 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

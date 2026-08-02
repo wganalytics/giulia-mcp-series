@@ -10,20 +10,48 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP que dá a um agente tools para operar o WhatsApp via Evolution API |
+| **Origem** | Cap. 7 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · httpx · uv |
 | **Como roda** | `uv run python src/evoapi_mcp.py` |
 | **Depende de** | instância **Evolution API v2** com número pareado |
 | **Segredos** | `EVOLUTION_BASE_URL`, `EVOLUTION_API_KEY` (token de instância), `EVOLUTION_INSTANCE` |
 | **Jira** | `MCP-4` (épico) · `MCP-12` `MCP-13` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — verificado contra a instância real GIULIA_AI, incluindo envio confirmado
+- **Funcional:** sim — verificado por **stdio real**: 4 tools com schema correto e,
+  sem credencial, falha com mensagem explícita em vez de travar
 - **Testes:** 35, passando (`uv run pytest`) — rede mockada
 - **Expõe:** 4 tools: `get_groups`, `get_group_messages`, `send_message_to_group`, `send_message_to_phone`
 - **Pendências:** o recorte por data é client-side (o endpoint `findMessages` não filtra por período) e esse endpoint **não devolve ordenado**
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** Aviso de envio real e remoção de identificadores pessoais
+
+**Features entregues:**
+- **Identificadores reais substituídos por fictícios nos testes**: número de telefone,
+  segundo número e ID de grupo do WhatsApp. Publicar número real num repositório público
+  convida spam
+- **Aviso no topo do README**: as tools de envio entregam mensagem de verdade, para pessoas
+  reais, sem modo de simulação e sem confirmação — quem chama é um agente LLM
+- README dizia **27 testes**; são **35**. Corrigido
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+
+**Decisões arquiteturais:**
+- Repositório público que age sobre pessoas reais precisa avisar antes, não depois
+
+**Problemas encontrados:**
+- A contagem errada no README passou despercebida por duas sessões
+
+**Próximos passos:**
+- Nada pendente
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -65,6 +93,7 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.

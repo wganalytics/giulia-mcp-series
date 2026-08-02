@@ -10,20 +10,43 @@
 | | |
 |---|---|
 | **O que é** | Servidor MCP cujas tools só executam mediante API Key válida (bcrypt + SQLite) |
+| **Origem** | Cap. 6 do livro *Model Context Protocol* (Sandeco) |
 | **Stack** | Python 3.11+ · fastmcp · bcrypt · sqlite3 · uv |
 | **Como roda** | `uv run python src/server_seguro.py` |
 | **Depende de** | bootstrap por CLI: `create-user` → `gen-key` → `.env` |
 | **Segredos** | `GIULIA_AI_API_KEY` (formato `sk-{user_id}-{secret}`) |
 | **Jira** | `MCP-24` (épico) · `MCP-25` `MCP-26` — projeto `MCP` |
 
-## 📊 Estado — 2026-07-31
+## 📊 Estado — 2026-08-02
 
-- **Funcional:** sim — autentica com chave válida e rejeita chave ausente, inválida ou de outro usuário
+- **Funcional:** sim — verificado por **stdio real**: 2 tools registradas e
+  `tool_segura` recusando chave inválida com `API Key inválida`
 - **Testes:** 33, passando (`uv run pytest`)
 - **Expõe:** 2 tools protegidas: `tool_segura`, `listar_usuarios`
 - **Pendências:** a chave vem do ambiente do **próprio servidor**, então isto é gate de configuração, não autenticação de chamador — autenticar quem chama exigiria transporte HTTP
 
 ## 📝 Registro de Sessões
+
+### Sessão #004 — 2026-08-02
+**Agente:** Claude Code (Opus 5)
+**Foco:** Publicação e prova funcional do caminho negativo
+
+**Features entregues:**
+- Publicado no repositório público **github.com/wganalytics/giulia-mcp-series** (MIT, CI verde)
+- `LICENSE` (MIT) e `.gitignore` próprios
+- CI no GitHub Actions rodando os testes a cada push
+- Docstring do `main.py` perdeu a referência ao código anterior
+
+**Decisões arquiteturais:**
+- Nenhuma mudança de código
+
+**Problemas encontrados:**
+- Nenhum
+
+**Próximos passos:**
+- Nada pendente
+
+---
 
 ### Sessão #003 — 2026-07-31
 **Agente:** Claude Code (Opus 5)
@@ -46,7 +69,7 @@
 - Destrutor como ponto de liberação de recurso: roda em hora indeterminada e engole exceção
 
 **Próximos passos:**
-- Autenticação de chamador de verdade exigiria transporte HTTP com a chave na requisição — fora do escopo deste projeto.
+- Autenticação de chamador de verdade exigiria transporte HTTP com a chave na requisição — fora do escopo do Cap. 6.
 
 ### Sessão #002 — 2026-07-01
 **Agente:** Antigravity (Gemini 3.1 Pro)
@@ -66,6 +89,7 @@
 **Foco:** Refatoração de Identidade e Padronização do Ecossistema GARE
 
 **Features entregues:**
+- Substituição de referências "Sandeco" para "Giulia-ai" e "Giulia AI".
 - Código-fonte e scripts movidos para o diretório `src/`.
 - Dependências de dados movidas para o diretório `data/`.
 - Documentação e artefatos de governança gerados no diretório `specs/`.
