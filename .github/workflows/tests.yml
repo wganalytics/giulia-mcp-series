@@ -1,0 +1,104 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Um push novo cancela a execução anterior da mesma branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Sete projetos que não dependem de infraestrutura: rodam na máquina limpa,
+  # sem credencial e sem rede. O que toca HTTP usa httpx.MockTransport.
+  testes:
+    name: ${{ matrix.projeto }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false          # um projeto quebrado não esconde o estado dos outros
+      matrix:
+        projeto:
+          - PRJ-01_ping_server
+          - PRJ-02_mcp_client
+          - PRJ-03_resources
+          - PRJ-04_prompts_streamlit
+          - PRJ-05_secure_server
+          - PRJ-06_whatsapp
+          - PRJ-08_agent_to_agent
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: ${{ matrix.projeto }}/uv.lock
+
+      - name: Instalar dependências (lockfile exato)
+        working-directory: ${{ matrix.projeto }}
+        run: uv sync --frozen
+
+      - name: pytest
+        working-directory: ${{ matrix.projeto }}
+        run: uv run pytest -v
+
+  # PRJ-07 é o único com testes de integração: 15 dos 73 exigem PostgreSQL de
+  # verdade, porque a tese do projeto é que quem recusa a escrita é o banco, não
+  # o Python. Provar isso com dublê seria provar nada.
+  testes-postgres:
+    name: PRJ-07_crewai (+ PostgreSQL)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: PRJ-07_crewai/uv.lock
+
+      - name: Criar bancos e carregar a massa versionada
+        working-directory: PRJ-07_crewai
+        env:
+          PGPASSWORD: postgres
+        run: |
+          for banco in ecommerce clinica; do
+            psql -h localhost -U postgres -c "CREATE DATABASE $banco"
+            psql -h localhost -U postgres -d "$banco" -f "data/seed_$banco.sql"
+          done
+
+      - name: Instalar dependências (lockfile exato)
+        working-directory: PRJ-07_crewai
+        run: uv sync --frozen
+
+      - name: pytest (73 testes — inclui os 15 de integração)
+        working-directory: PRJ-07_crewai
+        env:
+          PRJ07_TEST_DSN: postgresql://postgres:postgres@localhost:5432/ecommerce
+        run: uv run pytest -v
+
+      - name: Falhar se os testes de integração forem pulados
+        working-directory: PRJ-07_crewai
+        env:
+          PRJ07_TEST_DSN: postgresql://postgres:postgres@localhost:5432/ecommerce
+        run: |
+          # Sem esta guarda, um erro de configuração do banco viraria "15 skipped"
+          # e o job passaria em verde sem ter provado nada.
+          uv run pytest tests/test_postgres_readonly.py -q --no-header | tee /tmp/saida.txt
+          if grep -q "skipped" /tmp/saida.txt; then
+            echo "::error::Os testes de integração foram PULADOS — o PostgreSQL não subiu ou o DSN está errado."
+            exit 1
+          fi

@@ -1,5 +1,9 @@
 # Série MCP — 8 servidores de protocolo de agentes
 
+[![tests](https://github.com/wganalytics/giulia-mcp-series/actions/workflows/tests.yml/badge.svg)](https://github.com/wganalytics/giulia-mcp-series/actions/workflows/tests.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org)
+
 Oito projetos que implementam o **Model Context Protocol** (MCP) e o protocolo
 **Agent-to-Agent** (A2A) em Python, do servidor mínimo até dois agentes conversando
 entre processos separados.
@@ -83,6 +87,11 @@ Não há modo de demonstração em nenhum dos 8. Toda integração toca o sistem
 **212 testes** cobrem isso sem exigir credencial: o que depende de rede usa dublê de
 transporte (`httpx.MockTransport`), e o que depende de banco roda contra um
 **PostgreSQL 16 real** em Docker quando `PRJ07_TEST_DSN` está definida.
+
+Os 212 rodam no CI a cada push ([`.github/workflows/tests.yml`](.github/workflows/tests.yml)):
+os 8 projetos em paralelo, e um job dedicado sobe PostgreSQL para os 15 testes de
+integração do PRJ-07 — com uma guarda que **falha o job se eles forem pulados**, para
+que erro de configuração não vire verde silencioso.
 
 **18 defeitos corrigidos** no caminho. Oito só apareceram executando de verdade — entre
 eles um resource template que não encontrava **nenhum** contato, um prompt que existia
