@@ -40,7 +40,7 @@ antes eram hardcoded em `localhost:9999`.
 ## Testes
 
 ```bash
-uv run pytest        # 17 testes
+uv run pytest        # 23 testes
 ```
 
 Cobrem a montagem do AgentCard e o parsing da resposta A2A, sem subir o servidor.

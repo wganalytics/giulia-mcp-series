@@ -29,7 +29,7 @@ Correções: modelo agora configurável (antes fixo em Haiku ignorando `self.mod
 ## Testes
 
 ```bash
-uv run pytest        # 6 testes
+uv run pytest        # 12 testes
 ```
 
 Cobrem o histórico da conversa: o `chat()` não pode mutar a lista do chamador, nem deixar o `st.session_state` corrompido quando a chamada ao modelo falha.
