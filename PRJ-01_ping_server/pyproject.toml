@@ -1,7 +1,7 @@
 [project]
 name = "prj-01-cap02-ping-server"
 version = "0.1.0"
-description = "Servidor MCP mínimo: ping/echo + health-check TCP real"
+description = "Servidor MCP mínimo: ping/echo + health-check TCP real — Cap. 2 do livro MCP"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

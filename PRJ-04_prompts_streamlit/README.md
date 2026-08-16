@@ -2,7 +2,8 @@
 
 Chat em **Streamlit** que conecta a um servidor **MCP** (via `stdio`), lista os *prompts*
 MCP disponíveis, usa um **LLM** para escolher automaticamente o prompt mais adequado à
-pergunta e conduz a conversa.
+pergunta e conduz a conversa. Corresponde ao **Capítulo 5** do livro *Model Context
+Protocol* (Sandeco).
 
 ## Multi-provider (Claude / OpenAI / Gemini / OpenRouter)
 
@@ -28,7 +29,7 @@ Correções: modelo agora configurável (antes fixo em Haiku ignorando `self.mod
 ## Testes
 
 ```bash
-uv run pytest        # 12 testes
+uv run pytest        # 6 testes
 ```
 
 Cobrem o histórico da conversa: o `chat()` não pode mutar a lista do chamador, nem deixar o `st.session_state` corrompido quando a chamada ao modelo falha.

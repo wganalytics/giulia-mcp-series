@@ -1,7 +1,10 @@
-# PRJ-01 — Ping Server (servidor MCP mínimo)
+# PRJ-01 — Ping Server (MCP nível "super easy")
 
-Servidor **MCP** mínimo (FastMCP, transporte `stdio`), com uma tool de utilidade
-real: health-check TCP que mede latência.
+Servidor **MCP** (FastMCP, transporte `stdio`) — o exemplo introdutório do **Capítulo 2**
+do livro *Model Context Protocol* (Sandeco), aqui com uma tool de utilidade real.
+
+## 🏗️ Arquitetura do Servidor
+![Diagrama MCP Ping Server](architecture.svg)
 
 ## Tools
 

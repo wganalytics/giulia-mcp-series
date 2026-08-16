@@ -1,7 +1,7 @@
 [project]
 name = "prj-05-cap06-secure-server"
 version = "0.1.0"
-description = "Servidor MCP com autenticação por API Key (bcrypt + SQLite)"
+description = "Servidor MCP com autenticação por API Key (bcrypt + SQLite) — Cap. 6 do livro MCP"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

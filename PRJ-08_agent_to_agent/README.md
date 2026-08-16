@@ -1,7 +1,8 @@
 # PRJ-08 — Agent-to-Agent (A2A)
 
 Demonstra o protocolo **A2A** (Agent-to-Agent) com **dois processos** que se comunicam via
-HTTP/JSON-RPC usando o `a2a-sdk`.
+HTTP/JSON-RPC usando o `a2a-sdk`. Corresponde ao **Capítulo 9** do livro *Model Context
+Protocol* (Sandeco).
 
 - **Servidor** (`src/server/`): expõe um agente CrewAI "Redator" através de um `AgentCard`
   público. Descoberta via `A2ACardResolver`.
@@ -39,7 +40,7 @@ antes eram hardcoded em `localhost:9999`.
 ## Testes
 
 ```bash
-uv run pytest        # 23 testes
+uv run pytest        # 17 testes
 ```
 
 Cobrem a montagem do AgentCard e o parsing da resposta A2A, sem subir o servidor.

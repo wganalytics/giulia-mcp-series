@@ -1,21 +1,11 @@
 # PRJ-06 — WhatsApp via Evolution API (servidor MCP)
 
 Servidor **MCP** (FastMCP, `stdio`) que dá a um agente LLM *tools* para operar o WhatsApp
-através da **Evolution API** (gateway self-hosted).
+através da **Evolution API** (gateway self-hosted). Corresponde ao **Capítulo 7** do livro
+*Model Context Protocol* (Sandeco).
 
-Todas as operações são chamadas **reais** à Evolution API (`src/evolution_client.py`) —
-não há modo de simulação.
-
-> ## ⚠️ Este servidor envia mensagem de verdade
->
-> `send_message_to_group` e `send_message_to_phone` entregam mensagem real, para
-> pessoas reais, assim que apontarem para uma instância Evolution pareada. Não há
-> modo de simulação e não há confirmação antes do envio — quem chama a tool é um
-> agente LLM.
->
-> Se for experimentar, use um grupo seu ou o seu próprio número. Os **35 testes
-> automatizados não tocam a rede** (`httpx.MockTransport`), então `uv run pytest` é
-> sempre seguro.
+As implementações mock originais (grupos/mensagens fake e envio via `print`) foram
+substituídas por chamadas **reais** à Evolution API (`src/evolution_client.py`).
 
 ## Tools
 
@@ -67,7 +57,7 @@ sem rede.
 ## Testes
 
 ```bash
-uv run pytest        # 35 testes, sem tocar a rede (httpx.MockTransport)
+uv run pytest        # 27 testes, sem tocar a rede (httpx.MockTransport)
 ```
 
 Cobrem o reuso do cliente, o fechamento do pool, a validação de configuração, a

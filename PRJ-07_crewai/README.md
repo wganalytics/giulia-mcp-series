@@ -3,10 +3,11 @@
 Sistema **multi-agente CrewAI** + servidor **MCP** que faz **text-to-SQL**: o usuário
 conversa (Streamlit), um agente CrewAI usa as tools MCP, o servidor gera **SQL real** a
 partir de linguagem natural (com base no schema) e consulta bancos **PostgreSQL** de
-demonstração (`ecommerce` e `clinica`).
+demonstração (`ecommerce` e `clinica`). Corresponde ao **Capítulo 8** do livro *Model
+Context Protocol* (Sandeco).
 
-Tudo é real: geração de
-SQL por um Crew (`crew_ai_query.py`), conexão `psycopg2` (`postgres_connection.py`)
+Os mocks originais (SQL fixo, `MockCursor`, URI falsa) foram substituídos por: geração de
+SQL por um Crew real (`crew_ai_query.py`), conexão `psycopg2` real (`postgres_connection.py`)
 e URI a partir de env (`postgres_databases.py`). Consultas são **somente-leitura** — ver
 [Segurança](#segurança).
 
@@ -82,7 +83,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO giulia_ro;
 ## Testes
 
 ```bash
-uv run pytest                          # 58 testes de lógica pura, sem banco
+uv run pytest                          # 38 testes do sql_guard (lógica pura, sem banco)
 ```
 
 Os testes da camada 2 exigem um PostgreSQL de verdade — é o único jeito de provar que
@@ -93,7 +94,7 @@ docker run -d --name prj07-mcp-pg -e POSTGRES_PASSWORD=postgres -p 55432:5432 po
 # crie os bancos e rode os seeds (ver "Pré-requisitos" acima)
 
 export PRJ07_TEST_DSN="postgresql://postgres:postgres@localhost:55432/ecommerce"
-uv run pytest                          # 73 testes (58 + 15 de integração)
+uv run pytest                          # 53 testes (38 + 15 de integração)
 ```
 
 Entre os testes de integração está
