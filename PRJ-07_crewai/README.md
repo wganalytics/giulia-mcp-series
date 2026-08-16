@@ -83,7 +83,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO giulia_ro;
 ## Testes
 
 ```bash
-uv run pytest                          # 38 testes do sql_guard (lógica pura, sem banco)
+uv run pytest                          # 58 testes do sql_guard (lógica pura, sem banco)
 ```
 
 Os testes da camada 2 exigem um PostgreSQL de verdade — é o único jeito de provar que
